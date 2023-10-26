@@ -1,19 +1,34 @@
 const express = require('express')
 const router = express.Router()
-const crimeModel = require('../DB/index.js' )
+const { crimeModel } = require('../DB/index.js' )
 
-router.post('/crime',(req,res)=>{
+router.post('/crime',async (req,res)=>{
   try {
-    const { State, Year, Data } = req.body;
-    const newCrime = new crimeModel({ State, Year, Data });
+    const crimeData  = req.body;
+    const newCrime = new crimeModel(crimeData);
 
-    newCrime.save().then((savedCrime) => {
-      res.status(201).json(savedCrime);
-    });    
+    const savedCrime = await newCrime.save(); 
 
+    res.status(201).json(savedCrime);
   } catch (error) {
     res.status(500).json({error:'Failed to post a new crime'});
   }
 });
+
+router.get('/crime/:id', async (req, res) => {
+  try {
+    const userId = req.params.id; 
+    const findingCrime = await crimeModel.findOne({ _id: userId });
+
+    if (!findingCrime) {
+      return res.status(404).json({ error: 'Crime data not found' });
+    }
+
+    res.json(findingCrime);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get crime data' });
+  }
+});
+
 
 module.exports = router;

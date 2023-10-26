@@ -46,8 +46,8 @@ const crimeSchema = new Schema({
 
 
 
-const crimeModel = mongoose.model('crime rate prediction', crimeSchema);
-const userModel = mongoose.model('user',userSchema);
+const crimeModel = mongoose.model('crime rate predictions', crimeSchema);
+const userModel = mongoose.model('users',userSchema);
 
 
 module.exports ={
