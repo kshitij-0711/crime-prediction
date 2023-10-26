@@ -30,5 +30,21 @@ router.get('/crime/:id', async (req, res) => {
   }
 });
 
+router.get('/crime/:state/:year', async (req, res) => {
+  try {
+    const { state, year } = req.params;
+    const crimeData = await crimeModel.findOne({ state, year });
+
+    if (!crimeData) {
+      return res.status(404).json({ error: 'Crime data not found' });
+    }
+
+    res.json(crimeData);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve crime data' });
+  }
+});
+
+
 
 module.exports = router;
